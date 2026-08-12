@@ -36,12 +36,21 @@ export function getDb(): Client {
 
 let schemaReady: Promise<void> | null = null;
 
-/** 幂等初始化表结构（可重复调用，无副作用） */
+/** 幂等初始化表结构（可重复调用，无副作用）
+ * 注意：Turso 的 HTTP 协议不支持 executeMultiple，须逐条执行或使用 batch */
 export function ensureSchema(db: Client = getDb()): Promise<void> {
   if (!schemaReady) {
     schemaReady = (async () => {
       const sql = fs.readFileSync(path.join(process.cwd(), "lib", "schema.sql"), "utf-8");
-      await db.executeMultiple(sql);
+      const stmts = sql
+        .split(";")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+      if (stmts.length === 1) {
+        await db.execute(stmts[0]);
+      } else {
+        await db.batch(stmts);
+      }
     })().catch((err) => {
       schemaReady = null;
       throw err;
@@ -63,6 +72,7 @@ export function rowToRecord(row: unknown): any {
     updated_at: r.updated_at ? String(r.updated_at) : undefined,
   };
 }
+
 
 
 
