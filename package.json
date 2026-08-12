@@ -1,0 +1,26 @@
+{
+    "name":  "game-checkin",
+    "version":  "1.0.0",
+    "private":  true,
+    "description":  "每日游戏时长打卡网页（多人版）",
+    "scripts":  {
+                    "dev":  "next dev",
+                    "build":  "next build",
+                    "start":  "next start",
+                    "test":  "vitest run",
+                    "typecheck":  "tsc --noEmit"
+                },
+    "dependencies":  {
+                         "@libsql/client":  "^0.15.0",
+                         "next":  "^15.3.0",
+                         "react":  "^19.0.0",
+                         "react-dom":  "^19.0.0"
+                     },
+    "devDependencies":  {
+                            "@types/node":  "^22.0.0",
+                            "@types/react":  "^19.0.0",
+                            "@types/react-dom":  "^19.0.0",
+                            "typescript":  "^5.6.0",
+                            "vitest":  "^3.0.0"
+                        }
+}
